@@ -20,10 +20,13 @@ void TFSubscriber::tf_callback(const tf2_msgs::msg::TFMessage::SharedPtr msg) {
             double x = transform.transform.rotation.x;
             double y = transform.transform.rotation.y;
             double z = transform.transform.rotation.z;
-            double pitch = calculatePitchFromQuaternion(w, x, y, z);
+            double theta = calculatePitchFromQuaternion(w, x, y, z);
             rclcpp::Time timestamp = rclcpp::Time(transform.header.stamp.sec, transform.header.stamp.nanosec);
             
-            current_transform_ = {timestamp, x, y, pitch};
+            current_transform_.timestamp = timestamp;
+            current_transform_.x = transform.transform.translation.x;
+            current_transform_.y = transform.transform.translation.y;
+            current_transform_.theta = theta;
             break;
         }
     }
